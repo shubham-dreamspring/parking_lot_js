@@ -1,0 +1,24 @@
+{
+  "name": "parking-lot-js",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon -e hbs,js,scss ./bin/www & npm run scss",
+    "scss": "sass --watch views/scss/*.scss public/stylesheets/main.css"
+  },
+  "dependencies": {
+    "bootstrap": "^5.2.3",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "^4.18.2",
+    "hbs": "^4.2.0",
+    "http-errors": "~1.6.3",
+    "jquery": "^3.6.3",
+    "morgan": "~1.9.1",
+    "sass": "^1.58.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
