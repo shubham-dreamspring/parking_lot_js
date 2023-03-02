@@ -3,13 +3,19 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-// var sassMiddleware = require('node-sass-middleware');
+var hbs = require("hbs");
+
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
 var app = express();
-
+app.locals.listdata = [
+  { registration_no: "AB23131231", slot: "A4" },
+  { registration_no: "AB23131231", slot: "A4" },
+  { registration_no: "AB23131231", slot: "A4" },
+];
+hbs.localsAsTemplateData(app);
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -33,6 +39,9 @@ app.use(
   express.static(path.join(__dirname, "node_modules/jquery/dist"))
 );
 
+hbs.registerPartials(__dirname + "/views/partials", function (err) {
+  console.log(err);
+});
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
@@ -53,3 +62,4 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+exports.locals = app.locals;
