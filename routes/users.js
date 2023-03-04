@@ -31,9 +31,10 @@ router.post("/park", function (req, res, next) {
     data = car.park();
     res.send(data);
   } catch (e) {
-    if (e.message === "Something went wrong") res.status(500).send(e.message);
+    if (e.message === "Something went wrong")
+      res.status(500).send({ message: e.message });
 
-    res.status(400).send(e.message);
+    res.status(400).send({ message: e.message });
   }
 });
 
@@ -43,11 +44,12 @@ router.post("/unpark", function (req, res, next) {
   let data;
   try {
     car.unpark();
-    res.send("Car has been unparked");
+    res.send({ message: "Car has been unparked" });
   } catch (e) {
-    if (e.message === "Something went wrong") res.status(500).send(e.message);
+    if (e.message === "Something went wrong")
+      res.status(500).send({ message: e.message });
 
-    res.status(404).send(e.message);
+    res.status(404).send({ message: e.message });
   }
 });
 
