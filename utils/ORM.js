@@ -63,7 +63,7 @@ class CustomOrm {
     try {
       let data = fs.readFileSync(this.#dbDoc["car"], "utf8");
       data = JSON.parse(data);
-      data = data.push(car);
+      data.push(car);
       fs.writeFileSync(this.#dbDoc["car"], JSON.stringify(data));
     } catch (e) {
       console.log(e);
@@ -74,6 +74,7 @@ class CustomOrm {
     try {
       let data = fs.readFileSync(this.#dbDoc["car"], "utf8");
       data = JSON.parse(data);
+      console.log(data);
       data = data.filter((c) => c.registration_no !== registration_no);
       fs.writeFileSync(this.#dbDoc["car"], JSON.stringify(data));
     } catch (e) {
@@ -83,10 +84,10 @@ class CustomOrm {
 
   addEmptySlot(slot_id) {
     try {
-      let data = fs.readFileSync(this.#dbDoc["emptyslot"], "utf8");
+      let data = fs.readFileSync(this.#dbDoc["emptyslots"], "utf8");
       data = JSON.parse(data);
-      data = data.filter((c) => c !== slot_id);
-      fs.writeFileSync(this.#dbDoc["car"], JSON.stringify(data));
+      data.push(slot_id);
+      fs.writeFileSync(this.#dbDoc["emptyslots"], JSON.stringify(data));
     } catch (e) {
       console.log(e);
     }
