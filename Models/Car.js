@@ -11,6 +11,9 @@ class Car {
     if (validator.validateRegNo(this.registration_no)) {
       try {
         const orm = new CustomORM();
+        if (orm.findCarByReg(this.registration_no)) {
+          throw new Error("Car already parked");
+        }
         const slot = orm.getEmptySlot();
         if (!slot) {
           throw new Error("No empty slot");
@@ -22,7 +25,7 @@ class Car {
         };
         orm.addCar(car);
       } catch (e) {
-        if (e.message === "No empty slot") {
+        if (e.message === "No empty slot" || "Car already parked") {
           throw e;
         }
         throw new Error("Something went wrong");
