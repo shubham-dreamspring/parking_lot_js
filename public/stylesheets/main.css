@@ -1,3 +1,18 @@
-
+body {
+  background-image: url("/images/613.jpg");
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  background-position: center;
+}
+body > .row:first-of-type {
+  height: 100%;
+  width: 100%;
+}
+body > .row:first-of-type > :first-child {
+  height: 50%;
+  background: rgba(255, 217, 228, 0.6);
+  border-radius: 10px;
+}
 
 /*# sourceMappingURL=main.css.map */
