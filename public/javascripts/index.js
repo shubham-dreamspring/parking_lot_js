@@ -19,7 +19,7 @@ const formSubmit = async (event, action) => {
     if (status !== 200) {
       document.getElementById(`error-div-${action}`).classList.remove("d-none");
       document.getElementById(`error-div-${action}`).innerHTML = `
-      <h4 class="d-inline text-warning">${res.message}</h4>`;
+      <h4 class="d-inline text-danger">${res.message}</h4>`;
       return;
     }
     document.getElementById(`error-div-${action}`).classList.add("d-none");
