@@ -3,7 +3,10 @@
   <div class="col">
     {{> car_form btnText="PARK" action="park"}}
   </div>
-  <div class="col">
-    Your parking slot is:  <h4 class=" d-inline text-success">A3</h4>
+  <div class="col d-none" id="slot-div">
+    Your parking slot is:  <h4 class=" d-inline text-success" id="slot-id"></h4>
+  </div>
+  <div class="col d-none" id="error-div-park">
+    <h4 class=" d-inline text-warning" id="slot-id"></h4>
   </div>
 </div>

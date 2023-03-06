@@ -46,7 +46,7 @@ class Car {
         throw new Error("Something went wrong");
       }
     } else {
-      throw "Car Not found";
+      throw new Error("Car Not found");
     }
   }
 }

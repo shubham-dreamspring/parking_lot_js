@@ -1,3 +1,10 @@
+<dialog class="border border-success">
+  <div class="alert alert-success" id="modal-div" role="alert">
+  </div>
+  <form method="dialog">
+    <button type="submit" class="btn btn-outline-success d-block mx-auto">Okay</button>
+  </form>
+</dialog>
 <div class="row justify-content-center">
   <div class="col col-md-9">
     <nav>
@@ -65,14 +72,14 @@
         role="tabpanel"
         aria-labelledby="nav-contact-tab"
         tabindex="0"
-      >{{> car_list_wrapper}}</div>
+      >{{> car_list_wrapper list=recentCars}}</div>
       <div
         class="tab-pane fade"
         id="nav-disabled"
         role="tabpanel"
         aria-labelledby="nav-disabled-tab"
         tabindex="0"
-      >{{> car_list_wrapper}}</div>
+      >{{> car_list_wrapper list=allCars}}</div>
     </div>
 
   </div>
