@@ -6,7 +6,7 @@ const CustomOrm = require("../utils/ORM.js");
 router.get("/", function (req, res, next) {
   const db = new CustomOrm();
   req.app.locals.allCars = db.findAll("car");
-  req.app.locals.recentCars = db.findRecentCars();
+  req.app.locals.recentCars = db.findAll("car", "park_timestamp", 3);
 
   res.render("index", {
     title: "Parking Lots",

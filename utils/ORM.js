@@ -10,88 +10,66 @@ class CustomOrm {
     };
   }
 
-  findAll(doc) {
+  findAll(doc, sortProperty = null, limit = null) {
     let data = [];
     try {
       data = fs.readFileSync(this.#dbDoc[doc], "utf8");
       data = JSON.parse(data);
+      if (sortProperty)
+        data = data.sort(function (x, y) {
+          return y[sortProperty] - x[sortProperty];
+        });
+      if (limit) data = data.slice(0, 3);
     } catch (e) {
       console.log(e);
     }
     return data;
   }
-  findCarByReg(registration_no) {
-    let car;
+  deleteLastOne(doc) {
+    let result;
     try {
-      let data = fs.readFileSync(this.#dbDoc["car"], "utf8");
+      let data = fs.readFileSync(this.#dbDoc[doc], "utf8");
       data = JSON.parse(data);
-      car = data.find((c) => c.registration_no === registration_no);
+      result = data.pop();
+      fs.writeFileSync(this.#dbDoc[doc], JSON.stringify(data));
     } catch (e) {
       console.log(e);
     }
-    return car;
+    return result;
   }
-  findRecentCars() {
-    let data = [];
+  findAndDelete(doc, propertyName, propertyValue) {
     try {
-      data = fs.readFileSync(this.#dbDoc["car"], "utf8");
-      data = JSON.parse(data);
-      data = data.sort(function (x, y) {
-        return y.park_timestamp - x.park_timestamp;
-      });
-      data = data.slice(0, 3);
-    } catch (e) {
-      console.log(e);
-    }
-    return data;
-  }
-
-  getEmptySlot() {
-    let emptySlot;
-    try {
-      let data = fs.readFileSync(this.#dbDoc["emptyslots"], "utf8");
-      data = JSON.parse(data);
-      emptySlot = data.pop();
-      fs.writeFileSync(this.#dbDoc["emptyslots"], JSON.stringify(data));
-    } catch (e) {
-      console.log(e);
-    }
-    return emptySlot;
-  }
-
-  addCar(car) {
-    try {
-      let data = fs.readFileSync(this.#dbDoc["car"], "utf8");
-      data = JSON.parse(data);
-      data.push(car);
-      fs.writeFileSync(this.#dbDoc["car"], JSON.stringify(data));
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  removeCar(registration_no) {
-    try {
-      let data = fs.readFileSync(this.#dbDoc["car"], "utf8");
+      let data = fs.readFileSync(this.#dbDoc[doc], "utf8");
       data = JSON.parse(data);
       console.log(data);
-      data = data.filter((c) => c.registration_no !== registration_no);
-      fs.writeFileSync(this.#dbDoc["car"], JSON.stringify(data));
+      data = data.filter((c) => c[propertyName] !== propertyValue);
+      fs.writeFileSync(this.#dbDoc[doc], JSON.stringify(data));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  findById(doc, propertyName, propertyValue) {
+    let result;
+    try {
+      let data = fs.readFileSync(this.#dbDoc[doc], "utf8");
+      data = JSON.parse(data);
+      result = data.find((c) => c[propertyName] === propertyValue);
+    } catch (e) {
+      console.log(e);
+    }
+    return result;
+  }
+  pushData(doc, instance) {
+    try {
+      let data = fs.readFileSync(this.#dbDoc[doc], "utf8");
+      data = JSON.parse(data);
+      data.push(instance);
+      fs.writeFileSync(this.#dbDoc[doc], JSON.stringify(data));
     } catch (e) {
       console.log(e);
     }
   }
 
-  addEmptySlot(slot_id) {
-    try {
-      let data = fs.readFileSync(this.#dbDoc["emptyslots"], "utf8");
-      data = JSON.parse(data);
-      data.push(slot_id);
-      fs.writeFileSync(this.#dbDoc["emptyslots"], JSON.stringify(data));
-    } catch (e) {
-      console.log(e);
-    }
-  }
 }
 
 module.exports = CustomOrm;

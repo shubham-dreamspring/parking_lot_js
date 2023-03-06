@@ -6,7 +6,7 @@ var logger = require("morgan");
 var hbs = require("hbs");
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+var carsRouter = require("./routes/cars");
 
 var app = express();
 app.locals.allCars = [];
@@ -40,7 +40,7 @@ hbs.registerPartials(__dirname + "/views/partials", function (err) {
   console.log(err);
 });
 app.use("/", indexRouter);
-app.use("/cars", usersRouter);
+app.use("/cars", carsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

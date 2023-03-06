@@ -11,10 +11,10 @@ class Car {
     if (validator.validateRegNo(this.registration_no)) {
       try {
         const orm = new CustomORM();
-        if (orm.findCarByReg(this.registration_no)) {
+        if (orm.findById("car", "registration_no", this.registration_no)) {
           throw new Error("Car already parked");
         }
-        const slot = orm.getEmptySlot();
+        const slot = orm.deleteLastOne("emptyslots");
         if (!slot) {
           throw new Error("No empty slot");
         }
@@ -23,7 +23,7 @@ class Car {
           slot,
           park_timestamp: Date.now(),
         };
-        orm.addCar(car);
+        orm.pushData("car", car);
       } catch (e) {
         if (e.message === "No empty slot" || "Car already parked") {
           throw e;
@@ -39,11 +39,11 @@ class Car {
 
   unpark() {
     const orm = new CustomORM();
-    let car = orm.findCarByReg(this.registration_no);
+    let car = orm.findById("car", "registration_no", this.registration_no);
     if (car) {
       try {
-        orm.removeCar(this.registration_no);
-        orm.addEmptySlot(car.slot);
+        orm.findAndDelete("car", "registration_no", this.registration_no);
+        orm.pushData("emptyslots", car.slot);
       } catch (e) {
         console.log(e);
         throw new Error("Something went wrong");
