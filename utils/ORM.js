@@ -41,7 +41,6 @@ class CustomOrm {
     try {
       let data = fs.readFileSync(this.#dbDoc[doc], "utf8");
       data = JSON.parse(data);
-      console.log(data);
       data = data.filter((c) => c[propertyName] !== propertyValue);
       fs.writeFileSync(this.#dbDoc[doc], JSON.stringify(data));
     } catch (e) {
