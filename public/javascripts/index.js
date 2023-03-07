@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:3000/cars";
+const baseURL = "/cars";
 const dialog = document.querySelector("dialog");
 
 const formSubmit = async (event, action) => {
