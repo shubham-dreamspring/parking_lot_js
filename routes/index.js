@@ -1,16 +1,9 @@
 var express = require("express");
 var router = express.Router();
-const CustomOrm = require("../utils/ORM.js");
+const IndexController = require("../controller/index.controller");
 
+let indexController = new IndexController();
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  const db = new CustomOrm();
-  req.app.locals.allCars = db.findAll("car");
-  req.app.locals.recentCars = db.findAll("car", "park_timestamp", 3);
-
-  res.render("index", {
-    title: "Parking Lots",
-  });
-});
+router.get("/",indexController.getIndex);
 
 module.exports = router;
