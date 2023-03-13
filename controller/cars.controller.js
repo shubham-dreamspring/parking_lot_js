@@ -1,5 +1,5 @@
-const ORM = require("../utils/orm");
-const Car = require("../models/Car");
+const ORM = require("../utils/orms");
+const Car = require("../model/car");
 const orm = new ORM();
 
 class CarController {

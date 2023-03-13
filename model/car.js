@@ -1,4 +1,4 @@
-const CustomORM = require("../utils/orm.js");
+const CustomORM = require("../utils/orms.js");
 const Validator = require("../utils/validator.js");
 class Car {
   constructor(registration_no) {

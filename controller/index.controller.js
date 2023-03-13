@@ -1,4 +1,4 @@
-const CustomOrm = require("../utils/ORM.js");
+const CustomOrm = require("../utils/orms.js");
 
 class IndexController {
   getIndex(req, res, _) {
