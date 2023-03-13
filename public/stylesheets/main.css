@@ -15,4 +15,10 @@ body > .row:first-of-type > :first-child {
   border-radius: 10px;
 }
 
+#nav-tabContent {
+  height: calc(100% - 42px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
 /*# sourceMappingURL=main.css.map */
