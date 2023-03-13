@@ -1,4 +1,4 @@
-var ORM = require("../utils/ORM");
+var ORM = require("../utils/orm");
 
 describe("Test for ORM", () => {
   beforeEach(() => {
