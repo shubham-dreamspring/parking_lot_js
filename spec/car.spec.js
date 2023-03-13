@@ -1,5 +1,5 @@
-const Car = require("../Models/Car");
-const ORM = require("../utils/ORM");
+const Car = require("../model/car");
+const ORM = require("../utils/orm");
 describe("Tests for Car", () => {
   beforeAll(() => {
     this.registration_no = "UP23123456";
