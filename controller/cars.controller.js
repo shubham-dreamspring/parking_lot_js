@@ -1,4 +1,4 @@
-const ORM = require("../utils/orms");
+const ORM = require("../utils/orm");
 const Car = require("../model/car");
 const orm = new ORM();
 
