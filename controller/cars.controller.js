@@ -1,5 +1,5 @@
-const ORM = require("../utils/ORM");
-const Car = require("../Models/Car");
+const ORM = require("../utils/orm");
+const Car = require("../model/car");
 const orm = new ORM();
 
 class CarController {
@@ -13,6 +13,7 @@ class CarController {
       "registration_no",
       req.params.registration_no
     );
+    if (!data) res.status(404).json({ message: "Car not found" });
     res.send(data);
   }
   getRecentCars(_, res, __) {
