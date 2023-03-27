@@ -1,4 +1,4 @@
-const baseURL = "/cars";
+const baseURL = "/parkinglot";
 const dialog = document.querySelector("dialog");
 
 function renderErrorMessage(message, action) {

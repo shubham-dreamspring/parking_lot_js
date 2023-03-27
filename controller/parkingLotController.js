@@ -4,7 +4,7 @@ const ParkingLot = require("../model/parkingLot");
 
 const orm = new ORM();
 
-class CarController {
+class ParkingLotController {
   getAllCars(_, res, __) {
     let data = orm.findAll("car");
     res.send(data);
@@ -62,4 +62,4 @@ class CarController {
   }
 }
 
-module.exports = CarController;
+module.exports = ParkingLotController;
