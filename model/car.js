@@ -1,56 +1,54 @@
-const CustomORM = require("../utils/orm.js");
 const Validator = require("../utils/validator.js");
+const CustomORM = require("../utils/orm.js");
+
 class Car {
-  constructor(registration_no) {
+  constructor(registration_no, slot = null) {
     this.registration_no = registration_no;
+    this.park_timestamp = Date.now();
+    this.slot = slot;
   }
 
-  park() {
+  isRegistrationvalid() {
     const validator = new Validator();
-    let car;
-    if (validator.validateRegNo(this.registration_no)) {
-      try {
-        const orm = new CustomORM();
-        if (orm.findById("car", "registration_no", this.registration_no)) {
-          throw new Error("Car already parked");
-        }
-        const slot = orm.deleteLastOne("emptyslots");
-        if (!slot) {
-          throw new Error("No empty slot");
-        }
-        car = {
-          registration_no: this.registration_no,
-          slot,
-          park_timestamp: Date.now(),
-        };
-        orm.pushData("car", car);
-      } catch (e) {
-        if (e.message === "No empty slot" || "Car already parked") {
-          throw e;
-        }
-        throw new Error("Something went wrong");
-      }
-    } else {
-      throw new Error("Invalid Registration no");
-    }
+    return validator.validateRegNo(this.registration_no);
+  }
 
+  isParked() {
+    const orm = new CustomORM();
+    const car = orm.findById("car", "registration_no", this.registration_no);
+    if (car) {
+      this.slot = car.slot;
+      this.park_timestamp = car.park_timestamp;
+    }
     return car;
   }
 
-  unpark() {
+  getSlot() {
+    if (this.slot) return this.slot;
     const orm = new CustomORM();
-    let car = orm.findById("car", "registration_no", this.registration_no);
-    if (car) {
-      try {
-        orm.findAndDelete("car", "registration_no", this.registration_no);
-        orm.pushData("emptyslots", car.slot);
-      } catch (e) {
-        console.log(e);
-        throw new Error("Something went wrong");
-      }
-    } else {
-      throw new Error("Car Not found");
+    const slot = orm.deleteLastOne("emptyslots");
+    if (!slot) {
+      throw new Error("No empty slot");
     }
+    this.slot = slot;
+    return slot;
+  }
+
+  addCar() {
+    if (!this.slot) throw error("No slot found");
+
+    const orm = new CustomORM();
+    let car = {
+      registration_no: this.registration_no,
+      slot: this.slot,
+      park_timestamp: this.park_timestamp,
+    };
+    return orm.pushData("car", car);
+  }
+
+  deleteCar() {
+    const orm = new CustomORM();
+    orm.findAndDelete("car", "registration_no", this.registration_no);
   }
 }
 

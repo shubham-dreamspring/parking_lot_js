@@ -1,5 +1,7 @@
 const ORM = require("../utils/orm");
 const Car = require("../model/car");
+const ParkingLot = require("../model/parkingLot");
+
 const orm = new ORM();
 
 class CarController {
@@ -30,10 +32,11 @@ class CarController {
 
   parkCar(req, res, _) {
     const car = new Car(req.body.registration_no);
+    const parkingLot = new ParkingLot();
 
     let data;
     try {
-      data = car.park();
+      data = parkingLot.park(car);
       res.send({ message: "Car has been parked", ...data });
     } catch (e) {
       if (e.message === "Something went wrong")
@@ -45,9 +48,10 @@ class CarController {
 
   unparkCar(req, res, _) {
     const car = new Car(req.body.registration_no);
+    const parkingLot = new ParkingLot();
 
     try {
-      car.unpark();
+      parkingLot.unpark(car);
       res.send({ message: "Car has been unparked" });
     } catch (e) {
       if (e.message === "Something went wrong")
