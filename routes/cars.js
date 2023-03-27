@@ -1,12 +1,15 @@
 var express = require("express");
 const CarController = require("../controller/cars.controller");
+
 const carController = new CarController();
 var router = express.Router();
 
 /* GET users listing. */
 
 router.get("/recents", carController.getRecentCars);
+
 router.get("/getslot", carController.getEmptySlot);
+
 router.get("/:registration_no", carController.getCarByRegNo);
 
 router.post("/park", carController.parkCar);

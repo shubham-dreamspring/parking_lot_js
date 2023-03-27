@@ -1,6 +1,7 @@
 const CustomOrm = require("../utils/orm.js");
 
 class IndexController {
+  
   getIndex(req, res, _) {
     const db = new CustomOrm();
     req.app.locals.allCars = db.findAll("car");

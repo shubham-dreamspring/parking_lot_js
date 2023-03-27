@@ -23,10 +23,12 @@ describe("Test for ORM", () => {
       this.car_instance.registration_no
     );
   });
+
   it("Read recent data", () => {
     let cars = this.orm.findAll("car", "park_timestamp", 1);
     expect(cars[0].registration_no).toBe(this.car_instance.registration_no);
   });
+
   it("Read filtered result by specific property", () => {
     let car = this.orm.findById(
       "car",
