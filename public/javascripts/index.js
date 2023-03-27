@@ -6,6 +6,7 @@ function renderErrorMessage(message, action) {
   document.getElementById(`error-div-${action}`).innerHTML = `
       <h4 class="d-inline text-danger">${message}</h4>`;
 }
+
 async function parkCar(registration_no) {
   let action = "park";
   try {
@@ -29,7 +30,7 @@ async function parkCar(registration_no) {
     document.getElementById("slot-id").innerText = res.slot;
     document.getElementById(
       "modal-div"
-    ).innerHTML = `Your Car has been parked: ${res.slot}`;
+    ).innerHTML = `${res.message}: ${res.slot}`;
 
     dialog.showModal();
 
@@ -39,6 +40,7 @@ async function parkCar(registration_no) {
     alert("Something went wrong");
   }
 }
+
 async function unparkCar(registration_no) {
   let action = "unpark";
   try {
