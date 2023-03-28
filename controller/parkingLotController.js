@@ -1,32 +1,20 @@
-const ORM = require("../utils/orm");
 const Car = require("../model/car");
 const ParkingLot = require("../model/parkingLot");
 
-const orm = new ORM();
-
 class ParkingLotController {
   getAllCars(_, res, __) {
-    let data = orm.findAll("car");
+    let data = Car.findAllCars();
     res.send(data);
   }
 
   getCarByRegNo(req, res, __) {
-    const data = orm.findById(
-      "car",
-      "registration_no",
-      req.params.registration_no
-    );
+    const data = Car.findBy("registration_no", req.params.registration_no);
     if (!data) res.status(404).json({ message: "Car not found" });
     res.send(data);
   }
 
   getRecentCars(_, res, __) {
-    const data = orm.findAll("car", "park_timestamp", 3);
-    res.send(data);
-  }
-
-  getEmptySlot(_, res, __) {
-    let data = orm.deleteLastOne("emptyslots");
+    const data = Car.findAll("park_timestamp", 3);
     res.send(data);
   }
 

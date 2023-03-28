@@ -8,8 +8,6 @@ var router = express.Router();
 
 router.get("/recents", parkingLotController.getRecentCars);
 
-router.get("/getslot", parkingLotController.getEmptySlot);
-
 router.get("/:registration_no", parkingLotController.getCarByRegNo);
 
 router.post("/park", parkingLotController.parkCar);

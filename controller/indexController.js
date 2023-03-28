@@ -1,11 +1,9 @@
-const CustomOrm = require("../utils/orm.js");
+const Car = require("../model/car");
 
 class IndexController {
-  
   getIndex(req, res, _) {
-    const db = new CustomOrm();
-    req.app.locals.allCars = db.findAll("car");
-    req.app.locals.recentCars = db.findAll("car", "park_timestamp", 3);
+    req.app.locals.allCars = Car.findAll();
+    req.app.locals.recentCars = Car.findAll("park_timestamp", 3);
 
     res.render("index", {
       title: "Parking Lot",

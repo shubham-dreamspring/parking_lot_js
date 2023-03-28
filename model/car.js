@@ -50,6 +50,16 @@ class Car {
     const orm = new CustomORM();
     orm.findAndDelete("car", "registration_no", this.registration_no);
   }
+
+  static findAll(sortProperty = null, limit = null) {
+    const orm = new CustomORM();
+    return orm.findAll("car", sortProperty, limit);
+  }
+
+  static findBy(propertyName, propertyValue) {
+    const orm = new CustomORM();
+    return orm.findById("car", propertyName, propertyValue);
+  }
 }
 
 module.exports = Car;
