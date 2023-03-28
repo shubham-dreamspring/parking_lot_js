@@ -1,15 +1,14 @@
 var Validator = require("../utils/validator");
 
 describe("Vadiation of registration number", () => {
-  
   beforeAll(() => {
-    this.validator = new Validator().validateRegNo;
+    this.validator = new Validator().isValidRegistrationNumber;
   });
-  
+
   afterAll(() => {
     delete this.validator;
   });
-  
+
   it("Check for correct registration number", () => {
     expect(this.validator("UP72123456")).toBe(true);
     expect(this.validator("UP72asdfgh")).toBe(true);

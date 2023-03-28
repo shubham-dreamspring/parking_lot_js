@@ -1,10 +1,8 @@
-var express = require("express");
+const express = require("express");
 const ParkingLotController = require("../controller/parkingLotcontroller");
 
 const parkingLotController = new ParkingLotController();
-var router = express.Router();
-
-/* GET users listing. */
+const router = express.Router();
 
 router.get("/recents", parkingLotController.getRecentCars);
 

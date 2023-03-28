@@ -6,6 +6,6 @@ var router = express.Router();
 let indexController = new IndexController();
 
 /* GET home page. */
-router.get("/",indexController.getIndex);
+router.get("/", indexController.getIndex);
 
 module.exports = router;

@@ -1,54 +1,58 @@
 const Validator = require("../utils/validator.js");
 const CustomORM = require("../utils/orm.js");
+const ParkingLot = require("./parkingLot.js");
 
 class Car {
-  constructor(registration_no, slot = null) {
-    this.registration_no = registration_no;
-    this.park_timestamp = Date.now();
-    this.slot = slot;
+  constructor(registrationNo) {
+    this.registrationNo = registrationNo;
+
+    const orm = new CustomORM();
+    const car = orm.findById("car", "registration_no", registrationNo);
+
+    if (car) {
+      this.park_timestamp = car.park_timestamp;
+      this.slot = car.slot;
+    } else {
+      this.park_timestamp = Date.now();
+      this.slot = null;
+    }
   }
 
-  isRegistrationvalid() {
+  isValidRegistrationNumber() {
     const validator = new Validator();
-    return validator.validateRegNo(this.registration_no);
+    return validator.isValidRegistrationNumber(this.registrationNo);
   }
 
   isParked() {
-    const orm = new CustomORM();
-    const car = orm.findById("car", "registration_no", this.registration_no);
-    if (car) {
-      this.slot = car.slot;
-      this.park_timestamp = car.park_timestamp;
-    }
-    return car;
+    return this.slot ? true : false;
   }
 
   getSlot() {
-    if (this.slot) return this.slot;
-    const orm = new CustomORM();
-    const slot = orm.deleteLastOne("emptyslots");
-    if (!slot) {
-      throw new Error("No empty slot");
-    }
+    return this.slot;
+  }
+
+  setSlot(slot) {
     this.slot = slot;
-    return slot;
+  }
+
+  allAttributes() {
+    return {
+      registration_no: this.registrationNo,
+      slot: this.slot,
+      park_timestamp: this.park_timestamp,
+    };
   }
 
   addCar() {
     if (!this.slot) throw error("No slot found");
 
     const orm = new CustomORM();
-    let car = {
-      registration_no: this.registration_no,
-      slot: this.slot,
-      park_timestamp: this.park_timestamp,
-    };
-    return orm.pushData("car", car);
+    return orm.pushData("car", this.allAttributes());
   }
 
   deleteCar() {
     const orm = new CustomORM();
-    orm.findAndDelete("car", "registration_no", this.registration_no);
+    orm.findAndDelete("car", "registration_no", this.registrationNo);
   }
 
   static findAll(sortProperty = null, limit = null) {

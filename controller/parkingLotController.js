@@ -3,7 +3,7 @@ const ParkingLot = require("../model/parkingLot");
 
 class ParkingLotController {
   getAllCars(_, res, __) {
-    let data = Car.findAllCars();
+    let data = Car.findAll();
     res.send(data);
   }
 
