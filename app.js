@@ -1,14 +1,13 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var hbs = require("hbs");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const logger = require("morgan");
+const hbs = require("hbs");
 
-var indexRouter = require("./routes/index");
-var carsRouter = require("./routes/cars");
+const indexRouter = require("./routes/index");
+const parkingLotRouter = require("./routes/parkingLot");
 
-var app = express();
+const app = express();
 app.locals.allCars = [];
 app.locals.recentCars = [];
 
@@ -20,7 +19,6 @@ app.set("view engine", "hbs");
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
@@ -40,7 +38,7 @@ hbs.registerPartials(__dirname + "/views/partials", function (err) {
   console.log(err);
 });
 app.use("/", indexRouter);
-app.use("/cars", carsRouter);
+app.use("/parkinglot", parkingLotRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
