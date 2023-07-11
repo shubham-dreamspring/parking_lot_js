@@ -1,68 +1,39 @@
 const Validator = require("../utils/validator.js");
 const CustomORM = require("../utils/orm.js");
-const ParkingLot = require("./parkingLot.js");
+const { v4: uuidv4 } = require('uuid');
 
-class Car {
-  constructor(registrationNo) {
-    this.registrationNo = registrationNo;
+class Car extends CustomORM {
+  static _doc = "car";
 
-    const orm = new CustomORM();
-    const car = orm.findById("car", "registration_no", registrationNo);
+  constructor(registration_no, id = null) {
+    super(Car._doc);
+    this.registration_no = registration_no;
+    this.id = id;
+  }
 
+  validate() {
+    if (!this.isValidRegistrationNumber()) throw "Not a Valid Reg No";
+    if (this.alreadyExist()) throw "Already Exists";
+  }
+
+  alreadyExist() {
+    let car = Car.findById("registration_no", this.registration_no);
     if (car) {
-      this.park_timestamp = car.park_timestamp;
-      this.slot = car.slot;
-    } else {
-      this.park_timestamp = Date.now();
-      this.slot = null;
+      this.id = car.id;
+      return true;
     }
+    return false;
   }
 
   isValidRegistrationNumber() {
     const validator = new Validator();
-    return validator.isValidRegistrationNumber(this.registrationNo);
+    return validator.isValidRegistrationNumber(this.registration_no);
   }
 
-  isParked() {
-    return this.slot ? true : false;
-  }
-
-  getSlot() {
-    return this.slot;
-  }
-
-  setSlot(slot) {
-    this.slot = slot;
-  }
-
-  allAttributes() {
-    return {
-      registration_no: this.registrationNo,
-      slot: this.slot,
-      park_timestamp: this.park_timestamp,
-    };
-  }
-
-  addCar() {
-    if (!this.slot) throw error("No slot found");
-
-    const orm = new CustomORM();
-    return orm.pushData("car", this.allAttributes());
-  }
-
-  deleteCar() {
-    const orm = new CustomORM();
-    orm.findAndDelete("car", "registration_no", this.registrationNo);
-  }
-
-  static findAll(sortProperty = null, limit = null) {
-    const orm = new CustomORM();
-    return orm.findAll("car", sortProperty, limit);
-  }
-
-  static findBy(propertyName, propertyValue) {
-    const orm = new CustomORM();
-    return orm.findById("car", propertyName, propertyValue);
+  create() {
+    this.validate();
+    this.id = uuidv4();
+    return super.create();
   }
 }
 
