@@ -2,31 +2,20 @@ const Car = require("../model/car");
 const ParkingLot = require("../model/parkingLot");
 
 class ParkingLotController {
-  getAllCars(_, res, __) {
-    let data = Car.findAll();
-    res.send(data);
-  }
-
   getCarByRegNo(req, res, __) {
-    const data = Car.findBy("registration_no", req.params.registration_no);
+    const data = ParkingLot.findParkedCar(req.params.registration_no);
     if (!data) res.status(404).json({ message: "Car not found" });
     res.send(data);
   }
 
-  getRecentCars(_, res, __) {
-    const data = Car.findAll("park_timestamp", 3);
-    res.send(data);
-  }
-
   parkCar(req, res, _) {
-    const car = new Car(req.body.registration_no);
-    const parkingLot = new ParkingLot();
-
-    let data;
     try {
-      data = parkingLot.park(car);
+      const car = new Car(req.body.registration_no);
+      car.create();
+      let data = ParkingLot.park(car);
       res.send({ message: "Car has been parked", ...data });
     } catch (e) {
+      console.log(e);
       if (e.message === "Something went wrong")
         res.status(500).send({ message: e.message });
 
@@ -35,13 +24,13 @@ class ParkingLotController {
   }
 
   unparkCar(req, res, _) {
-    const car = new Car(req.body.registration_no);
-    const parkingLot = new ParkingLot();
-
     try {
-      parkingLot.unpark(car);
+      const car = new Car(req.body.registration_no);
+      if (!car.alreadyExist()) throw new Error("Car is not parked");
+      ParkingLot.unpark(car);
       res.send({ message: "Car has been unparked" });
     } catch (e) {
+      console.log(e);
       if (e.message === "Something went wrong")
         res.status(500).send({ message: e.message });
 
