@@ -17,8 +17,8 @@ class ParkingLot {
   }
 
   static unpark(car) {
-    Slot.findAndDelete("vehicle_id", car.id);
-    Car.findAndDelete("id", car.id);
+    Slot.delete("vehicle_id", car.id);
+    Car.delete("id", car.id);
   }
 
   static parkedCars(sortProperty = null, limit = null) {
@@ -31,9 +31,9 @@ class ParkingLot {
   }
 
   static findParkedCar(registration_no) {
-    let car = Car.findById("registration_no", registration_no);
+    let car = Car.find("registration_no", registration_no);
     if (!car) throw new RecordNotFound("Car is not found");
-    let slot = Slot.findById("vehicle_id", car.id);
+    let slot = Slot.find("vehicle_id", car.id);
     if (!slot) throw new RecordNotFound("Slot is not found");
 
     return {

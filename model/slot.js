@@ -13,7 +13,7 @@ class Slot extends CustomOrm {
   }
 
   car() {
-    let car = Car.findById("id", this.vehicle_id);
+    let car = Car.find("id", this.vehicle_id);
     if (!car) throw new RecordNotFound("car is not there");
     return new Car(car.registration_no, car.id);
   }
@@ -52,15 +52,14 @@ class Slot extends CustomOrm {
     return result;
   }
 
-  static findById(propertyName, propertyValue) {
-    const slot = super.findById(propertyName, propertyValue);
-    console.log(slot);
+  static find(propertyName, propertyValue) {
+    const slot = super.find(propertyName, propertyValue);
     if (!slot) throw new RecordNotFound("No slot find !");
     return new Slot(slot.id, slot.vehicle_id, slot.timestamp);
   }
 
-  static findAndDelete(propertyName, propertyValue) {
-    const slot = Slot.findById(propertyName, propertyValue);
+  static delete(propertyName, propertyValue) {
+    const slot = Slot.find(propertyName, propertyValue);
     if (!slot) throw new RecordNotFound("No slot find !");
     slot.timestamp = null;
     slot.vehicle_id = null;

@@ -18,7 +18,7 @@ class CustomOrm {
     });
   }
 
-  static findAndDelete(propertyName = "id", propertyValue) {
+  static delete(propertyName = "id", propertyValue) {
     return CustomOrm._adapter.readAndWrite(
       this._doc,
       (data) => data.filter((c) => c[propertyName] !== propertyValue),
@@ -26,7 +26,7 @@ class CustomOrm {
     );
   }
 
-  static findById(propertyName, propertyValue) {
+  static find(propertyName, propertyValue) {
     return CustomOrm._adapter.readAndWrite(this._doc, (data) =>
       data.find((c) => c[propertyName] === propertyValue)
     );

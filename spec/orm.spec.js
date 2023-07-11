@@ -30,7 +30,7 @@ describe("Test for ORM", () => {
   });
 
   it("Read filtered result by specific property", () => {
-    let car = this.orm.findById(
+    let car = this.orm.find(
       "car",
       "registration_no",
       this.car_instance.registration_no

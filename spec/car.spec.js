@@ -28,7 +28,7 @@ describe("Tests for Car", () => {
     expect(car_details.slot).toBeDefined();
     expect(car_details.park_timestamp).toBeDefined();
     const orm = new ORM();
-    let car_in_db = orm.findById(
+    let car_in_db = orm.find(
       "car",
       "registration_no",
       this.registration_no
@@ -52,7 +52,7 @@ describe("Tests for Car", () => {
     parkingLot.unpark(car);
 
     const orm = new ORM();
-    let car_in_db = orm.findById(
+    let car_in_db = orm.find(
       "car",
       "registration_no",
       this.registration_no

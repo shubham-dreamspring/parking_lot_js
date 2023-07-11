@@ -19,7 +19,7 @@ class Car extends CustomORM {
   }
 
   alreadyExist() {
-    let car = Car.findById("registration_no", this.registration_no);
+    let car = Car.find("registration_no", this.registration_no);
     if (car) {
       this.id = car.id;
       return true;
