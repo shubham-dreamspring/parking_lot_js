@@ -1,40 +1,36 @@
 const Car = require("../model/car");
 const ParkingLot = require("../model/parkingLot");
+const { AlreadyExist } = require("../utils/errors/errors");
 
 class ParkingLotController {
-  getCarByRegNo(req, res, __) {
-    const data = ParkingLot.findParkedCar(req.params.registration_no);
-    if (!data) res.status(404).json({ message: "Car not found" });
-    res.send(data);
+  getCarByRegNo(req, res, next) {
+    try {
+      const data = ParkingLot.findParkedCar(req.params.registration_no);
+      res.send(data);
+    } catch (e) {
+      next(e);
+    }
   }
 
-  parkCar(req, res, _) {
+  parkCar(req, res, next) {
     try {
       const car = new Car(req.body.registration_no);
       car.create();
       let data = ParkingLot.park(car);
       res.send({ message: "Car has been parked", ...data });
     } catch (e) {
-      console.log(e);
-      if (e.message === "Something went wrong")
-        res.status(500).send({ message: e.message });
-
-      res.status(400).send({ message: e.message });
+      next(e);
     }
   }
 
-  unparkCar(req, res, _) {
+  unparkCar(req, res, next) {
     try {
       const car = new Car(req.body.registration_no);
-      if (!car.alreadyExist()) throw new Error("Car is not parked");
+      if (!car.alreadyExist()) throw new AlreadyExist("Car is not parked");
       ParkingLot.unpark(car);
       res.send({ message: "Car has been unparked" });
     } catch (e) {
-      console.log(e);
-      if (e.message === "Something went wrong")
-        res.status(500).send({ message: e.message });
-
-      res.status(404).send({ message: e.message });
+      next(e);
     }
   }
 }

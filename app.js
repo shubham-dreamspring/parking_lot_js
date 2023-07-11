@@ -6,6 +6,7 @@ const hbs = require("hbs");
 
 const indexRouter = require("./routes/index");
 const parkingLotRouter = require("./routes/parkingLot");
+const errorHandler = require("./utils/errors/errorHandler");
 
 const app = express();
 app.locals.allCars = [];
@@ -45,6 +46,7 @@ app.use(function (req, res, next) {
   next(createError(404));
 });
 
+app.use(errorHandler);
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development

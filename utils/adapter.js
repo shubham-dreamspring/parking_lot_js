@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { ConnectionIssue } = require("./errors/errors");
 
 class Adapter {
   #dbDoc;
@@ -20,6 +21,7 @@ class Adapter {
       return result;
     } catch (e) {
       console.log(e);
+      throw new ConnectionIssue(e.message);
     }
   }
 }

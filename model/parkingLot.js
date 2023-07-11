@@ -1,5 +1,6 @@
 const Slot = require("./slot.js");
 const Car = require("./car");
+const { RecordNotFound } = require("../utils/errors/errors.js");
 
 class ParkingLot {
   static park(car) {
@@ -31,7 +32,9 @@ class ParkingLot {
 
   static findParkedCar(registration_no) {
     let car = Car.findById("registration_no", registration_no);
+    if (!car) throw new RecordNotFound("Car is not found");
     let slot = Slot.findById("vehicle_id", car.id);
+    if (!slot) throw new RecordNotFound("Slot is not found");
 
     return {
       park_timestamp: slot.timestamp,

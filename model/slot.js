@@ -1,3 +1,4 @@
+const { RecordNotFound } = require("../utils/errors/errors");
 const CustomOrm = require("../utils/orm");
 const Car = require("./car");
 
@@ -13,7 +14,7 @@ class Slot extends CustomOrm {
 
   car() {
     let car = Car.findById("id", this.vehicle_id);
-    if (!car) throw new Error("No result found");
+    if (!car) throw new RecordNotFound("car is not there");
     return new Car(car.registration_no, car.id);
   }
 
@@ -22,7 +23,7 @@ class Slot extends CustomOrm {
     let emptyslots = slots.filter((slot) => !slot.vehicle_id);
 
     if (!emptyslots.length) {
-      throw new Error("No empty slot");
+      throw new RecordNotFound("No empty slot");
     }
     let slot = new Slot(
       emptyslots[0].id,
@@ -38,7 +39,7 @@ class Slot extends CustomOrm {
       .filter((slot) => slot.vehicle_id)
       .map((slot) => new Slot(slot.id, slot.vehicle_id, slot.timestamp));
     if (!filledSlots.length) {
-      throw new Error("No Filled slot");
+      throw new RecordNotFound("No Filled slot");
     }
 
     return filledSlots;
@@ -50,16 +51,17 @@ class Slot extends CustomOrm {
     );
     return result;
   }
-  
+
   static findById(propertyName, propertyValue) {
     const slot = super.findById(propertyName, propertyValue);
     console.log(slot);
-    if (!slot) throw new Error("No slot find !");
+    if (!slot) throw new RecordNotFound("No slot find !");
     return new Slot(slot.id, slot.vehicle_id, slot.timestamp);
   }
-  
+
   static findAndDelete(propertyName, propertyValue) {
     const slot = Slot.findById(propertyName, propertyValue);
+    if (!slot) throw new RecordNotFound("No slot find !");
     slot.timestamp = null;
     slot.vehicle_id = null;
     slot.update();
