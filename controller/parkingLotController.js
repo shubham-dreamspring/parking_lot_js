@@ -1,6 +1,5 @@
 const Car = require("../model/car");
 const ParkingLot = require("../model/parkingLot");
-const { AlreadyExist } = require("../utils/errors/errors");
 
 class ParkingLotController {
   getCarByRegNo(req, res, next) {
@@ -15,7 +14,6 @@ class ParkingLotController {
   parkCar(req, res, next) {
     try {
       const car = new Car(req.body.registration_no);
-      car.create();
       let data = ParkingLot.park(car);
       res.send({ message: "Car has been parked", ...data });
     } catch (e) {
@@ -26,7 +24,6 @@ class ParkingLotController {
   unparkCar(req, res, next) {
     try {
       const car = new Car(req.body.registration_no);
-      if (!car.alreadyExist()) throw new AlreadyExist("Car is not parked");
       ParkingLot.unpark(car);
       res.send({ message: "Car has been unparked" });
     } catch (e) {

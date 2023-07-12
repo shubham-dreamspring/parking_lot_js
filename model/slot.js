@@ -64,7 +64,7 @@ class Slot extends CustomOrm {
 
   static reset() {
     let data = [];
-    const noOfSlots = process.env.TOTAL_NUMBER_OF_SLOTS;
+    const noOfSlots = process.env.TOTAL_NUMBER_OF_SLOTS || 10;
 
     for (let i = 1; i <= noOfSlots; i++) {
       data.push({

@@ -27,7 +27,6 @@ class CustomOrm {
   }
 
   static reset(data = []) {
-    console.log(data, this._doc);
     return CustomOrm._adapter.write(this._doc, data);
   }
 

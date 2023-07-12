@@ -9,6 +9,7 @@ class ParkingLot {
   }
 
   static park(car) {
+    car.create();
     let slot = Slot.getEmptySlot();
     slot.vehicle_id = car.id;
     slot.timestamp = Date.now();
@@ -22,6 +23,7 @@ class ParkingLot {
   }
 
   static unpark(car) {
+    if (!car.alreadyExist()) throw new RecordNotFound("Car is not parked");
     Slot.delete("vehicle_id", car.id);
     Car.delete("id", car.id);
   }
