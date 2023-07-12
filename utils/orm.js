@@ -26,6 +26,11 @@ class CustomOrm {
     );
   }
 
+  static reset(data = []) {
+    console.log(data, this._doc);
+    return CustomOrm._adapter.write(this._doc, data);
+  }
+
   static find(propertyName, propertyValue) {
     return CustomOrm._adapter.readAndWrite(this._doc, (data) =>
       data.find((c) => c[propertyName] === propertyValue)

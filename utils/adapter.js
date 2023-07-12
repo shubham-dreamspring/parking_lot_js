@@ -24,6 +24,16 @@ class Adapter {
       throw new ConnectionIssue(e.message);
     }
   }
+
+  write(doc, data) {
+    try {
+      fs.writeFileSync(this.#dbDoc[doc], JSON.stringify(data));
+      return data;
+    } catch (e) {
+      console.log(e);
+      throw new ConnectionIssue(e.message);
+    }
+  }
 }
 
 module.exports = Adapter;

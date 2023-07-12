@@ -38,10 +38,6 @@ class Slot extends CustomOrm {
     let filledSlots = slots
       .filter((slot) => slot.vehicle_id)
       .map((slot) => new Slot(slot.id, slot.vehicle_id, slot.timestamp));
-    if (!filledSlots.length) {
-      throw new RecordNotFound("No Filled slot");
-    }
-
     return filledSlots;
   }
   static findAll(sortProperty = null, limit = null) {
@@ -64,6 +60,20 @@ class Slot extends CustomOrm {
     slot.timestamp = null;
     slot.vehicle_id = null;
     slot.update();
+  }
+
+  static reset() {
+    let data = [];
+    const noOfSlots = process.env.TOTAL_NUMBER_OF_SLOTS;
+
+    for (let i = 1; i <= noOfSlots; i++) {
+      data.push({
+        id: i,
+        timestamp: null,
+        vehicle_id: null,
+      });
+    }
+    super.reset(data)
   }
 }
 

@@ -33,6 +33,16 @@ class ParkingLotController {
       next(e);
     }
   }
+
+  initialize(req, res, next) {
+    try {
+      ParkingLot.initialise();
+      res.send({ message: "Parking lot has been initialised" });
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  }
 }
 
 module.exports = ParkingLotController;

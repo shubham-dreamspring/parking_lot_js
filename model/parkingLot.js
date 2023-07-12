@@ -3,6 +3,11 @@ const Car = require("./car");
 const { RecordNotFound } = require("../utils/errors/errors.js");
 
 class ParkingLot {
+  static initialise() {
+    Car.reset();
+    Slot.reset();
+  }
+
   static park(car) {
     let slot = Slot.getEmptySlot();
     slot.vehicle_id = car.id;
