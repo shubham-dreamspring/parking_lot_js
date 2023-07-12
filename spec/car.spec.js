@@ -1,62 +1,29 @@
 const Car = require("../model/car");
-const ParkingLot = require("../model/parkingLot");
-const ORM = require("../utils/orm");
+const { InvalidInput, AlreadyExist } = require("../utils/errors/errors");
 
-describe("Tests for Car", () => {
+describe("Tests for", () => {
   beforeAll(() => {
-    this.registration_no = "UP23123456";
+    Car.reset();
   });
 
-  afterAll(() => {
-    delete this.registration_no;
-  });
-
-  it("parking with invalid registration no", () => {
+  it("creating car with invalid registration no", () => {
     expect(function () {
-      let car = new Car("UPsdaksd93459cd48");
-      const parkingLot = new ParkingLot();
-      parkingLot.park(car);
-    }).toThrow(new Error("Invalid Registration no"));
+      new Car("UPsdaksd93459cd48").create();
+    }).toThrowError(InvalidInput);
   });
 
-  it("park car", () => {
-    let car = new Car(this.registration_no);
-    const parkingLot = new ParkingLot();
-    let car_details = parkingLot.park(car);
-
-    expect(car_details.registration_no).toBe(this.registration_no);
-    expect(car_details.slot).toBeDefined();
-    expect(car_details.park_timestamp).toBeDefined();
-    const orm = new ORM();
-    let car_in_db = orm.find(
-      "car",
-      "registration_no",
-      this.registration_no
-    );
-    expect(car_in_db.registration_no).toBeDefined();
-    parkingLot.unpark(car);
+  it("creating a car", () => {
+    new Car("UP12345678").create();
+    let cars = Car.findAll();
+    expect(cars.length).toBe(1);
+    Car.delete("registration_no", "UP12345678");
   });
 
-  it("unpark with not parked registration no", () => {
+  it("creating already existed car", () => {
+    new Car("WW91827364").create();
     expect(function () {
-      let car = new Car("KA23123456");
-      const parkingLot = new ParkingLot();
-      parkingLot.unpark(car);
-    }).toThrow(new Error("Car Not found"));
-  });
-
-  it("unpark car", () => {
-    let car = new Car(this.registration_no);
-    const parkingLot = new ParkingLot();
-    parkingLot.park(car);
-    parkingLot.unpark(car);
-
-    const orm = new ORM();
-    let car_in_db = orm.find(
-      "car",
-      "registration_no",
-      this.registration_no
-    );
-    expect(car_in_db).toBeUndefined();
+      new Car("WW91827364").create();
+    }).toThrowError(AlreadyExist);
+    Car.delete("registration_no", "WW91827364");
   });
 });
