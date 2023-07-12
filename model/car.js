@@ -35,7 +35,8 @@ class Car extends CustomORM {
   create() {
     this.validate();
     this.id = uuidv4();
-    return super.create();
+    super.create();
+    return this;
   }
 }
 
