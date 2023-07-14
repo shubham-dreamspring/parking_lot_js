@@ -1,6 +1,6 @@
 const Slot = require("./slot.js");
 const Car = require("./car");
-const { RecordNotFound } = require("../utils/errors/errors.js");
+const { CarNotFound, SlotNotFound } = require("../utils/errors/errors.js");
 
 class ParkingLot {
   static initialise() {
@@ -23,8 +23,8 @@ class ParkingLot {
   }
 
   static unpark(car) {
-    if (!car.alreadyExist()) throw new RecordNotFound("Car is not parked");
-    Slot.delete("vehicle_id", car.id);
+    if (!car.alreadyExist()) throw new CarNotFound("Car is not parked");
+    Slot.vacantSlot("vehicle_id", car.id);
     Car.delete("id", car.id);
   }
 
@@ -39,9 +39,9 @@ class ParkingLot {
 
   static findParkedCar(registration_no) {
     let car = Car.find("registration_no", registration_no);
-    if (!car) throw new RecordNotFound("Car is not found");
+    if (!car) throw new CarNotFound("Car is not found");
     let slot = Slot.find("vehicle_id", car.id);
-    if (!slot) throw new RecordNotFound("Slot is not found");
+    if (!slot) throw new SlotNotFound("Car is not parked");
 
     return {
       park_timestamp: slot.timestamp,

@@ -1,4 +1,8 @@
-const { RecordNotFound } = require("../utils/errors/errors");
+const {
+  CarNotFound,
+  NoEmptySlot,
+  SlotNotFound,
+} = require("../utils/errors/errors");
 const CustomOrm = require("../utils/orm");
 const Car = require("./car");
 
@@ -14,7 +18,7 @@ class Slot extends CustomOrm {
 
   car() {
     let car = Car.find("id", this.vehicle_id);
-    if (!car) throw new RecordNotFound("car is not there");
+    if (!car) throw new CarNotFound("car is not parked with this id");
     return new Car(car.registration_no, car.id);
   }
 
@@ -23,7 +27,7 @@ class Slot extends CustomOrm {
     let emptyslots = slots.filter((slot) => !slot.vehicle_id);
 
     if (!emptyslots.length) {
-      throw new RecordNotFound("No empty slot");
+      throw new NoEmptySlot("No empty slot is available");
     }
     let slot = new Slot(
       emptyslots[0].id,
@@ -50,13 +54,13 @@ class Slot extends CustomOrm {
 
   static find(propertyName, propertyValue) {
     const slot = super.find(propertyName, propertyValue);
-    if (!slot) throw new RecordNotFound("No slot find !");
+    if (!slot) throw new SlotNotFound("No slot found !");
     return new Slot(slot.id, slot.vehicle_id, slot.timestamp);
   }
 
-  static delete(propertyName, propertyValue) {
+  static vacantSlot(propertyName, propertyValue) {
     const slot = Slot.find(propertyName, propertyValue);
-    if (!slot) throw new RecordNotFound("No slot find !");
+    if (!slot) throw new SlotNotFound("No slot found !");
     slot.timestamp = null;
     slot.vehicle_id = null;
     slot.update();
@@ -73,7 +77,7 @@ class Slot extends CustomOrm {
         vehicle_id: null,
       });
     }
-    super.reset(data)
+    super.reset(data);
   }
 }
 
