@@ -1,8 +1,8 @@
-var Validator = require("../utils/validator");
+var RegistrationNoValidator = require("../utils/validator");
 
 describe("Vadiation of registration number", () => {
   beforeAll(() => {
-    this.validator = new Validator().isValidRegistrationNumber;
+    this.validator = new RegistrationNoValidator().isValidRegistrationNumber;
   });
 
   afterAll(() => {

@@ -1,4 +1,4 @@
-const Validator = require("../utils/validator.js");
+const RegistrationNoValidator = require("../utils/validator.js");
 const CustomORM = require("../utils/orm.js");
 const { v4: uuidv4 } = require("uuid");
 const { InvalidRegNo, CarAlreadyParked } = require("../utils/errors/errors.js");
@@ -29,7 +29,7 @@ class Car extends CustomORM {
   }
 
   isValidRegistrationNumber() {
-    const validator = new Validator();
+    const validator = new RegistrationNoValidator();
     return validator.isValidRegistrationNumber(this.registration_no);
   }
 
