@@ -1,50 +1,53 @@
-const CustomORM = require("../utils/orm.js");
+const Slot = require("./slot.js");
+const Car = require("./car");
+const { CarNotFound, SlotNotFound } = require("../utils/errors/errors.js");
 
 class ParkingLot {
-  park(car) {
-    if (car.isValidRegistrationNumber()) {
-      try {
-        if (car.isParked()) {
-          throw new Error("Car already parked");
-        }
-        car.setSlot(ParkingLot.getEmptySlot());
-        car.addCar();
-      } catch (e) {
-        if (e.message === "No empty slot" || "Car already parked") {
-          throw e;
-        }
-        throw new Error("Something went wrong");
-      }
-    } else {
-      throw new Error("Invalid Registration no");
-    }
-
-    return car.allAttributes();
+  static initialise() {
+    Car.reset();
+    Slot.reset();
   }
 
-  unpark(car) {
-    if (car.isParked()) {
-      try {
-        const orm = new CustomORM();
+  static park(car) {
+    car.create();
+    let slot = Slot.getEmptySlot();
+    slot.vehicle_id = car.id;
+    slot.timestamp = Date.now();
+    slot.update();
 
-        car.deleteCar();
-        orm.pushData("emptyslots", car.slot);
-      } catch (e) {
-        console.log(e);
-        throw new Error("Something went wrong");
-      }
-    } else {
-      throw new Error("Car Not found");
-    }
+    return {
+      registration_no: car.registration_no,
+      park_timestamp: slot.timestamp,
+      slot_id: slot.id,
+    };
   }
 
-  static getEmptySlot() {
-    const orm = new CustomORM();
-    const slot = orm.deleteLastOne("emptyslots");
-    if (!slot) {
-      throw new Error("No empty slot");
-    }
-    return slot;
+  static unpark(car) {
+    if (!car.alreadyExist()) throw new CarNotFound("Car is not parked");
+    Slot.vacantSlot("vehicle_id", car.id);
+    Car.delete("id", car.id);
+  }
+
+  static parkedCars(sortProperty = null, limit = null) {
+    let slots = Slot.getFilledSlot(sortProperty, limit);
+    let result = slots.map((slot) => ({
+      slot_id: slot.id,
+      registration_no: slot.car().registration_no,
+    }));
+    return result;
+  }
+
+  static findParkedCar(registration_no) {
+    let car = Car.find("registration_no", registration_no);
+    if (!car) throw new CarNotFound("Car is not found");
+    let slot = Slot.find("vehicle_id", car.id);
+    if (!slot) throw new SlotNotFound("Car is not parked");
+
+    return {
+      park_timestamp: slot.timestamp,
+      registration_no: car.registration_no,
+      slot_id: slot.id,
+    };
   }
 }
 

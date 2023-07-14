@@ -2,50 +2,42 @@ const Car = require("../model/car");
 const ParkingLot = require("../model/parkingLot");
 
 class ParkingLotController {
-  getAllCars(_, res, __) {
-    let data = Car.findAll();
-    res.send(data);
-  }
-
-  getCarByRegNo(req, res, __) {
-    const data = Car.findBy("registration_no", req.params.registration_no);
-    if (!data) res.status(404).json({ message: "Car not found" });
-    res.send(data);
-  }
-
-  getRecentCars(_, res, __) {
-    const data = Car.findAll("park_timestamp", 3);
-    res.send(data);
-  }
-
-  parkCar(req, res, _) {
-    const car = new Car(req.body.registration_no);
-    const parkingLot = new ParkingLot();
-
-    let data;
+  getCarByRegNo(req, res, next) {
     try {
-      data = parkingLot.park(car);
-      res.send({ message: "Car has been parked", ...data });
+      const data = ParkingLot.findParkedCar(req.params.registration_no);
+      res.send(data);
     } catch (e) {
-      if (e.message === "Something went wrong")
-        res.status(500).send({ message: e.message });
-
-      res.status(400).send({ message: e.message });
+      next(e);
     }
   }
 
-  unparkCar(req, res, _) {
-    const car = new Car(req.body.registration_no);
-    const parkingLot = new ParkingLot();
-
+  parkCar(req, res, next) {
     try {
-      parkingLot.unpark(car);
+      const car = new Car(req.body.registration_no);
+      let data = ParkingLot.park(car);
+      res.send({ message: "Car has been parked", ...data });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  unparkCar(req, res, next) {
+    try {
+      const car = new Car(req.body.registration_no);
+      ParkingLot.unpark(car);
       res.send({ message: "Car has been unparked" });
     } catch (e) {
-      if (e.message === "Something went wrong")
-        res.status(500).send({ message: e.message });
+      next(e);
+    }
+  }
 
-      res.status(404).send({ message: e.message });
+  initialize(req, res, next) {
+    try {
+      ParkingLot.initialise();
+      res.send({ message: "Parking lot has been initialised" });
+    } catch (e) {
+      console.log(e);
+      next(e);
     }
   }
 }

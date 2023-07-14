@@ -27,10 +27,10 @@ async function parkCar(registration_no) {
     }
     document.getElementById(`error-div-${action}`).classList.add("d-none");
     document.getElementById("slot-div").classList.remove("d-none");
-    document.getElementById("slot-id").innerText = res.slot;
+    document.getElementById("slot-id").innerText = res.slot_id;
     document.getElementById(
       "modal-div"
-    ).innerHTML = `${res.message}: ${res.slot}`;
+    ).innerHTML = `${res.message}: ${res.slot_id}`;
 
     dialog.showModal();
 
@@ -93,7 +93,7 @@ async function findCar(registration_no) {
     document.getElementById(`success-div-${action}`).classList.remove("d-none");
     document.getElementById(
       `success-div-${action}`
-    ).innerHTML = `<div class = "d-flex flex-column align-items-center"><p class=" fs-4 my-1">Car has been parked :-<strong class="d-inline text-success">${res.slot}</strong></p><button type="button" class="btn btn-outline-danger d-block my-2 mx-auto" onclick="unparkCar('${registration_no}')">Unpark</button></div>`;
+    ).innerHTML = `<div class = "d-flex flex-column align-items-center"><p class=" fs-4 my-1">Car has been parked :-<strong class="d-inline text-success">${res.slot_id}</strong></p><button type="button" class="btn btn-outline-danger d-block my-2 mx-auto" onclick="unparkCar('${registration_no}')">Unpark</button></div>`;
   } catch (e) {
     console.log(e);
     alert("Something went wrong !");
