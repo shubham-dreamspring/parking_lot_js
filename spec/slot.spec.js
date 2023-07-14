@@ -1,18 +1,16 @@
 const Car = require("../model/car");
 const Slot = require("../model/slot");
 
-describe("Tests for", () => {
-  beforeAll(() => {
+describe("Slots", () => {
+  beforeEach(() => {
     Slot.reset();
-    Car.reset();
   });
 
-  afterAll(() => {
+  afterEach(() => {
     Slot.reset();
-    Car.reset();
   });
 
-  it("getting empty slot", () => {
+  it("will get empty slot", () => {
     let slot = Slot.getEmptySlot();
 
     expect(slot.id).toBeDefined();
@@ -20,32 +18,31 @@ describe("Tests for", () => {
     expect(slot.vehicle_id).toBeNull();
   });
 
-  it("getting filled slot", () => {
+  it("will get filled slots", () => {
     let slots = Slot.getFilledSlot();
+
     expect(slots.length).toBe(0);
   });
 
-  it("updating a slot", () => {
+  it("will update a slot", () => {
     let slot = Slot.getEmptySlot();
+
     slot.timestamp = Date.now();
     slot.vehicle_id = 1;
     slot.update();
 
     expect(Slot.getFilledSlot().length).toBe(1);
-    Slot.delete("vehicle_id", 1);
   });
 
-  it("return car of a slot", () => {
+  it("will return car of a slot", () => {
     let car = new Car("WW12345678").create();
-    
     let slot = Slot.getEmptySlot();
     slot.timestamp = Date.now();
     slot.vehicle_id = car.id;
     slot.update();
 
-    expect(slot.car().registration_no).toBe(car.registration_no);
+    let carAtSlot = slot.car();
 
-    Slot.delete("vehicle_id", car.id);
-    Car.delete("registration_no", car.registration_no);
+    expect(carAtSlot.registration_no).toBe(car.registration_no);
   });
 });

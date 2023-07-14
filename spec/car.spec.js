@@ -1,29 +1,33 @@
 const Car = require("../model/car");
 const { InvalidInput, AlreadyExist } = require("../utils/errors/errors");
 
-describe("Tests for", () => {
-  beforeAll(() => {
+describe("Cars ", () => {
+  beforeEach(() => {
     Car.reset();
   });
+  afterAll(() => {
+    Car.reset();
+  });
+  it("will throw error on creation with invalid registration no", () => {
+    let car = new Car("UPsdaksd93459cd48");
 
-  it("creating car with invalid registration no", () => {
     expect(function () {
-      new Car("UPsdaksd93459cd48").create();
+      car.create();
     }).toThrowError(InvalidInput);
   });
 
-  it("creating a car", () => {
+  it("will created", () => {
     new Car("UP12345678").create();
-    let cars = Car.findAll();
-    expect(cars.length).toBe(1);
-    Car.delete("registration_no", "UP12345678");
+
+    let car = Car.find("registration_no", "UP12345678");
+    expect(car.registration_no).toBe("UP12345678");
   });
 
-  it("creating already existed car", () => {
+  it("will throw error on creation with already existed car", () => {
     new Car("WW91827364").create();
+    
     expect(function () {
       new Car("WW91827364").create();
     }).toThrowError(AlreadyExist);
-    Car.delete("registration_no", "WW91827364");
   });
 });

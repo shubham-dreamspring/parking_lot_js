@@ -2,16 +2,16 @@ const Car = require("../model/car");
 const ParkingLot = require("../model/parkingLot");
 const { RecordNotFound } = require("../utils/errors/errors");
 
-describe("Tests for", () => {
+describe("Parking Lot", () => {
   beforeEach(() => {
     ParkingLot.initialise();
   });
 
-  afterAll(() => {
+  afterEach(() => {
     ParkingLot.initialise();
   });
 
-  it("park car", () => {
+  it("will park car", () => {
     let car = new Car("UP12345678");
     let car_details = ParkingLot.park(car);
 
@@ -19,27 +19,29 @@ describe("Tests for", () => {
     expect(car_details.slot_id).toBeDefined();
     expect(car_details.park_timestamp).toBeDefined();
 
-    expect(Car.findAll().length).toBe(1);
+    expect(Car.find("registration_no", "UP12345678")).toBeDefined();
     expect(ParkingLot.parkedCars().length).toBe(1);
   });
 
-  it("unpark with not parked registration no", () => {
+  it("will not unpark if car is not parked", () => {
+    let car = new Car("KA23123456");
+
     expect(function () {
-      let car = new Car("KA23123456");
       ParkingLot.unpark(car);
     }).toThrowError(RecordNotFound);
   });
 
-  it("unpark car", () => {
+  it("will unpark car", () => {
     let car = new Car("UP12345678");
     ParkingLot.park(car);
+
     ParkingLot.unpark(car);
 
     expect(Car.findAll().length).toBe(0);
     expect(ParkingLot.parkedCars().length).toBe(0);
   });
 
-  it("get list of all parked cars", () => {
+  it("will give list of all parked cars", () => {
     ParkingLot.park(new Car("UP12345678"));
     ParkingLot.park(new Car("MP12345678"));
     ParkingLot.park(new Car("KP12345678"));
